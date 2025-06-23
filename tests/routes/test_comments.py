@@ -56,6 +56,26 @@ def test_create_and_get_comments(client):
     assert reply["parent_id"] == top["id"]
 
 
+def test_create_comment_nonexistent_author(client):
+    user_res = client.post("/users/", json={"username": "c"})
+    user_id = user_res.json()["id"]
+
+    disc_res = client.post("/discussions/", params={"author_id": user_id}, json={
+        "title": "Test Thread",
+        "body": "Let's talk"
+    })
+    discussion_id = disc_res.json()["id"]
+
+    nonexistent_user_id = 9999
+    comment_res = client.post(
+        f"/comments/discussion/{discussion_id}",
+        params={"author_id": nonexistent_user_id},
+        json={"body": "First top-level comment"}
+    )
+    assert comment_res.status_code == 404
+    assert comment_res.json()["detail"] == "Author not found"
+
+
 def test_get_comments_for_empty_discussion(client):
     # Create a user and a discussion
     user = client.post("/users/", json={"username": "lonely_user"}).json()

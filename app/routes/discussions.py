@@ -8,7 +8,9 @@ router = APIRouter(prefix="/discussions", tags=["discussions"])
 
 @router.post("/", response_model=schemas.DiscussionOut)
 def create_discussion(discussion: schemas.DiscussionCreate, author_id: int, db: Session = Depends(database.get_db)):
-    print("Incoming discussion data:", discussion.dict())
+    author = db.query(models.User).get(author_id)
+    if not author:
+        raise HTTPException(status_code=404, detail="Author not found")
     db_disc = models.Discussion(**discussion.dict(), author_id=author_id)
     db.add(db_disc)
     db.commit()

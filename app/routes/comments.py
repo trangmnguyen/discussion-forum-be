@@ -9,6 +9,9 @@ router = APIRouter(prefix="/comments", tags=["comments"])
 
 @router.post("/discussion/{discussion_id}", response_model=schemas.CommentOut)
 def create_comment(discussion_id: int, comment: schemas.CommentCreate, author_id: int, db: Session = Depends(database.get_db)):
+    author = db.query(models.User).get(author_id)
+    if not author:
+        raise HTTPException(status_code=404, detail="Author not found")
     db_comment = models.Comment(
         body=comment.body,
         author_id=author_id,

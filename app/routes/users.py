@@ -8,7 +8,6 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/", response_model=schemas.UserOut)
 def create_user(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
-    print("Incoming discussion data:", user.dict())
     db_user = models.User(username=user.username)
     db.add(db_user)
     try:

@@ -15,6 +15,15 @@ def test_create_discussion(client):
     assert data["author_id"] == user_id
     assert "id" in data
 
+def test_create_discussion_nonexistent_author(client):
+    user_id = 99999
+    response = client.post("/discussions/", params={"author_id": user_id}, json={
+        "title": "Fake Author Post",
+        "body": "This is the first discussion."
+    })
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Author not found"
+
 def test_create_discussion_missing_title(client):
     user_res = client.post("/users/", json={"username": "missing_title_user"})
     user_id = user_res.json()["id"]
