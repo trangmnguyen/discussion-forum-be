@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# macOS
+.DS_Store
+
+# Virtual environment
+venv/
+env/
+
+# SQLite database files
+*.sqlite3
+*.db
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+
+# Alembic migration artifacts
+alembic/versions/
+
+# Logs and other files
+*.log
+
+# Pytest cache
+.pytest_cache/
+.cache/
+
+# MyPy, Coverage, etc.
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environment variables
+.env
+
